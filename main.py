@@ -1,10 +1,15 @@
-from fastapi import FastAPI 
+from fastapi import FastAPI , Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+
+
+
 
 best = FastAPI()
+best.mount("/static",StaticFiles(directory="static"),name="static")
 
 
-
-
+templates = Jinja2Templates(directory="templates")
 
 
 posts: list[dict] = [
@@ -27,13 +32,20 @@ posts: list[dict] = [
 
 
 
-@best.get("/")
-def home():
-    return {"message": "hello worlds! we are changing this "}
+# @best.get("/",response_class=HTMLResponse,include_in_schema=False)
+# @best.get("/posts",response_class=HTMLResponse,include_in_schema=False)
+
+@best.get("/",include_in_schema=False)
+@best.get("/posts",include_in_schema=False)
+def home(request:Request):
+    return templates.TemplateResponse(request,"home.html",{"posts":posts,"title":"Home"})
 
 @best.get("/api/post")
 def get_posts():
     return posts
+
+
+
 
 
 
