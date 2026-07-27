@@ -10,7 +10,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
-
+#we are testing git stash
 posts: list[dict] = [
     {
         "id": 1,
